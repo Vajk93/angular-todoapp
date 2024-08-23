@@ -1,0 +1,25 @@
+section {
+	font-family: "Josefin Sans", sans-serif;
+}
+
+.my_shadow {
+	box-shadow: 1px 9px 59px 1px rgba(179,132,212,0.3);
+	-webkit-box-shadow: 1px 9px 59px 1px rgba(179,132,212,0.3);
+	-moz-box-shadow: 1px 9px 59px 1px rgba(179,132,212,0.3);
+}
+
+.my_shadow_dark_mode {
+	box-shadow: 1px 9px 59px 1px rgba(0, 0, 0, 0.1);
+	-webkit-box-shadow: 1px 9px 59px 1px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 1px 9px 59px 1px rgba(0, 0, 0, 0.1);
+  }
+  
+
+.hide_scrollbar {
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* IE és Edge */
+}
+  
+.hide_scrollbar::-webkit-scrollbar { 
+	display: none; /* Chrome, Safari és Opera */
+}

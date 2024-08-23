@@ -1,0 +1,93 @@
+<!-- for light theme:  -->
+<img *ngIf="theme === 'light'" src="../../../assets/todo-app-main/images/bg-desktop-light.jpg" alt="" class="hidden lg:block  h-auto w-full fixed top-0 left-0 right-0 -z-10">
+<img *ngIf="theme === 'light'" src="../../../assets/todo-app-main/images/bg-mobile-light.jpg" alt="" class="lg:hidden  h-auto w-full fixed top-0 left-0 right-0 -z-10">
+<!-- for dark theme: -->
+<img *ngIf="theme === 'dark'" src="../../../assets/todo-app-main/images/bg-desktop-dark.jpg" alt="" class="hidden lg:block  h-auto w-full fixed top-0 left-0 right-0 -z-10">
+<img *ngIf="theme === 'dark'"src="../../../assets/todo-app-main/images/bg-mobile-dark.jpg" alt="" class="lg:hidden  h-auto w-full fixed top-0 left-0 right-0 -z-10">
+
+<section class="w-full h-full px-5 mt-20">
+	<div class="w-full md:w-[600px] mx-auto">
+		<!-- title: -->
+		<div class="flex justify-between">
+			<h1 class="text-white mb-7 text-4xl font-semibold">T O D O</h1>
+			<div (click)="changeTheme()" class="pt-1 cursor-pointer">
+				<svg *ngIf="theme !== 'dark'" xmlns="http://www.w3.org/2000/svg" width="26" height="26"><path fill="#FFF" fill-rule="evenodd" d="M13 0c.81 0 1.603.074 2.373.216C10.593 1.199 7 5.43 7 10.5 7 16.299 11.701 21 17.5 21c2.996 0 5.7-1.255 7.613-3.268C23.22 22.572 18.51 26 13 26 5.82 26 0 20.18 0 13S5.82 0 13 0z"/></svg>
+				<svg *ngIf="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" width="26" height="26"><path fill="#FFF" fill-rule="evenodd" d="M13 21a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-5.657-2.343a1 1 0 010 1.414l-2.121 2.121a1 1 0 01-1.414-1.414l2.12-2.121a1 1 0 011.415 0zm12.728 0l2.121 2.121a1 1 0 01-1.414 1.414l-2.121-2.12a1 1 0 011.414-1.415zM13 8a5 5 0 110 10 5 5 0 010-10zm12 4a1 1 0 110 2h-3a1 1 0 110-2h3zM4 12a1 1 0 110 2H1a1 1 0 110-2h3zm18.192-8.192a1 1 0 010 1.414l-2.12 2.121a1 1 0 01-1.415-1.414l2.121-2.121a1 1 0 011.414 0zm-16.97 0l2.121 2.12A1 1 0 015.93 7.344L3.808 5.222a1 1 0 011.414-1.414zM13 0a1 1 0 011 1v3a1 1 0 11-2 0V1a1 1 0 011-1z"/></svg>
+			</div>
+		</div>
+
+		<!-- prompt: -->
+		<div class="flex h-[60px] rounded-md bg-white dark:bg-my-dark-very-dark-desaturated-blue w-full overflow-hidden my_shadow mt-5 md:mt-0">
+			<div class="flex justify-center items-center px-5">
+				<div class="relative rounded-full border-my-bright-blue h-7 w-7 bg-slate-200">
+					<div class="absolute top-[2px] left-[2px] right-[2px] bottom-[2px] dark:top-[1px] dark:bottom-[1px] dark:left-[1px] dark:right-[1px] rounded-full bg-white dark:bg-my-dark-very-dark-desaturated-blue"></div>
+				</div>
+			</div>
+			<input [(ngModel)]="inputValue" 
+				(keydown.enter)="addToDo()" type="text" 
+				class="flex-1 outline-none text-[18px] bg-white dark:bg-my-dark-very-dark-desaturated-blue" 
+				placeholder="Create ToDo"
+				[ngClass]="theme === 'light' ? 'text-my-black-text' : 'text-my-dark-light-grayish-blue'"
+			>
+		</div>
+
+		<!-- item container: -->
+		<div *ngIf="toDos[0]" 
+			class="mt-7 rounded-t-md flex flex-col gap-[1px] max-h-[400px] overflow-hidden overflow-y-scroll hide_scrollbar"
+			[ngClass]="theme === 'light' ? 'my_shadow bg-slate-200' : 'my_shadow_dark_mode bg-slate-700'"
+		>
+			<!-- item: -->
+			<div *ngFor="let it of toDos; let i = index" 
+				(mouseenter)="selectToDo(it.id)"
+				(mouseleave)="removeSelectedToDo()" 
+				class="flex min-h-[60px] bg-white dark:bg-my-dark-very-dark-desaturated-blue w-full">
+				<div class="flex justify-center items-center px-5">
+					<div (click)="toggleTodoCompletion(it)" 
+						[ngClass]="{
+							'bg-my-linear-bg': selectedToDoId === it.id || it.completed, 
+							'bg-slate-200': selectedToDoId !== it.id,
+						}"
+						class="relative rounded-full border-my-bright-blue h-7 w-7 cursor-pointer flex justify-center items-center">
+						<div *ngIf="!it.completed" class="absolute top-[2px] dark:top-[1px] left-[2px] right-[2px] dark:bottom-[1px] dark:left-[1px]  dark:right-[1px] bottom-[2px] rounded-full bg-white dark:bg-my-dark-very-dark-desaturated-blue"></div>
+						<svg class="pl-[1px]" xmlns="http://www.w3.org/2000/svg" width="11" height="9"><path fill="none" stroke="#FFF" stroke-width="2" d="M1 4.304L3.696 7l6-6"/></svg>
+					</div>
+				</div>
+				<div class="flex items-center flex-1">
+					<p class="text-[18px] text-my-black-text dark:text-my-dark-light-grayish-blue" 
+						[ngClass]="{'opacity-30 line-through' : it.completed}">
+						{{it.name}}
+					</p>
+				</div>
+				<div (click)="deleteToDo(it.id)" *ngIf="selectedToDoId == it.id" 
+					class="flex justify-center items-center bg-white dark:bg-my-dark-very-dark-desaturated-blue px-5 text-my-black-text dark:text-my-dark-light-grayish-blue cursor-pointer">
+					<!-- delete svg: -->
+					<svg class="size-8 " stroke-width="0.7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"  stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+				</div>
+			</div>
+		</div>
+
+		<!-- space between prompt and bottom navigation if no todo: -->
+		<div *ngIf="!toDos[0]" class="w-full h-7"></div>
+		
+		<!-- bottom navigation: -->
+		<div class="rounded-b-md text-my-black-text dark:text-my-dark-light-grayish-blue" [ngClass]="theme === 'light' ? 'my_shadow' : 'my_shadow_dark_mode'">
+			<div class="flex justify-between items-center bg-white dark:bg-my-dark-very-dark-desaturated-blue h-[50px] px-5  border-t-[1px] border-slate-200 dark:border-slate-700 md:rounded-b-md">
+				<p class="hidden md:block cursor-default">{{!isCompletedClicked ? itemLeft + ' items left': itemCompleted + ' items completed'}}</p>
+				<div class="flex gap-7 mx-auto">
+					<button (click)="getTodos()" class="cursor-pointer">All</button>
+					<button (click)="showNotCompleted()" class="cursor-pointer">Active</button>
+					<button (click)="showCompleted()" class="cursor-pointer">Completed</button>
+				</div>
+				<p (click)="deleteCompleted()" class="hidden md:block cursor-pointer">Clear Completed</p>
+			</div>
+			<div class="md:hidden h-[50px] flex justify-between items-center bg-white dark:bg-my-dark-very-dark-desaturated-blue px-5 border-t-[1px] border-slate-200 rounded-b-md">
+				<p class="md:hidden cursor-default">{{!isCompletedClicked ? itemLeft + ' items left': itemCompleted + ' items completed'}}</p>
+				<p (click)="deleteCompleted()" class="cursor-pointer md:hidden">Clear Completed</p>
+			</div>
+		</div>
+
+	</div>
+</section>
+
+<!-- "fake" body background color: -->
+<div class="fixed top-0 left-0 right-0 bottom-0 bg-white -z-20 dark:bg-my-dark-very-dark-blue"></div>
